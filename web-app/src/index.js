@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
-// import '../node_modules/normalize.css/normalize.css';
-// import '../node_modules/@blueprintjs/core/lib/css/blueprint.css';
-// import '../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
-// import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -15,6 +13,7 @@ root.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    <ToastContainer />
   </React.StrictMode>
 );
 

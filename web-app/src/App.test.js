@@ -30,3 +30,8 @@ test('renders home', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
+test('logs in', () => {
+  render(<Home />);
+  const linkElement = screen.getByText(/Home/i);
+  expect(linkElement).toBeInTheDocument();
+});
