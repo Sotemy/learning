@@ -1,24 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { Users } from 'src/schemas/user.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UserDocument, Users } from 'src/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
-    private readonly users: Users[] = [];
+  constructor(@InjectModel(Users.name) private userModel: Model<UserDocument>) {}
 
-    create(user: Users): {} {
+    async create(user: Users): Promise<Object> {
       if (Object.keys(user).length <= 0 && user.email === undefined && user.username === undefined) {
         return {message: 'error'}
       }
-      this.users.push(user);
-      return user
+      const res = new this.userModel(user)
+      res.save();
+      return res
     }
   
-    findAll(): Users[] {
-      return this.users;
+    async findAll(): Promise<Users[]> {
+      return this.userModel.find().exec();
     }
 
     login(user: Users): {} {
-      const found = this.users.find(obj => obj.username === user.username)
+      const found = this.userModel.findOne({user})
       return found
     }
 }

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, RawBodyRequest, Request } from '@nestjs/common';
-import { Users } from 'src/schemas/user.interface';
+import { Users } from 'src/schemas/user.schema';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
