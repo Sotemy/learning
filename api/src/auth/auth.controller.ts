@@ -3,7 +3,7 @@ import { Users } from 'src/schemas/user.schema';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
-export class CatsController {
+export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Get()
