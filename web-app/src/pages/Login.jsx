@@ -31,7 +31,7 @@ export const Login = () => {
         error: {
           render({ data }) {
             // When the promise reject, data will contains the error
-            return data.message
+            return data.response.data.message
           }
         }
       }

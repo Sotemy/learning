@@ -1,47 +1,59 @@
 const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 const User = require("../database/schemas/users.schema")
 
 const loginController = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email })
+    const full_fields = email && password
 
-    if (user) {
+    if (full_fields) {
+        
+        const user = await User.findOne({ email })
 
-        if (bcrypt.compare(password, user.password)) {
+        if (user) {
 
-            return res.json({ email: user.email, password: user.password })
+            if (await bcrypt.compare(password, user.password)) {
 
+                return res.json({ email: user.email, username: user.username, token: generate_token(user._id) })
+
+            }
+
+            throw new Error('Wrong pass')
         }
 
-        throw new Error('wrong pass')
-    }
+        throw new Error('Wrong username')
 
-    throw new Error('wrong username')
+    }
+    throw new Error('Please fill all fields')
+
 })
 
 const registerController = asyncHandler(async(req, res) => {
     const { email, password, username, password2 } = req.body;
-    const user = await User.findOne({ email })
 
-    if (user) {
+    const full_fields = email && password && username && password2
+    if(full_fields) {
+        if (password === password2) {
+            const user = await User.findOne({ email })
 
-        if (username === user.username) {
-
+            if (user) {
+                throw new Error('Wrong email')
+            }
+            
             const hash = await bcrypt.hash(password, 10)
             const new_user = new User({username: username, password: hash, email: email})
             new_user.save()
-
-            return res.json({ email: email, password: password, username: username, password2: password2 })
-
+        
+            return res.json({ email: email, username: username, token: generate_token(new_user._id) })
         }
-
-        throw new Error('wrong username')
+        throw new Error('Passwords are not same')
     }
+    throw new Error('Please fill all fields')
 
-    throw new Error('wrong email')
+
 })
 
 const resetController = (req, res) => {
@@ -49,4 +61,17 @@ const resetController = (req, res) => {
     return res.json({ email: email })
 }
 
-module.exports = { resetController, loginController, registerController }
+const generate_token = ( id ) => {
+    const token = jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "30d"})
+    return token
+}
+
+const verify_token = (token) => {
+    const res = jwt.verify(token, process.env.JWT_SECRET)
+    if (!res) {
+        return false
+    }
+    return true
+}
+
+module.exports = { resetController, loginController, registerController, generate_token, verify_token }

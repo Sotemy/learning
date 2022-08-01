@@ -31,9 +31,8 @@ export const Register = () => {
         },
         error: {
           render({ data }) {
-            console.log(data)
             // When the promise reject, data will contains the error
-            return data.message
+            return data.response.data.message
           }
         }
       }
