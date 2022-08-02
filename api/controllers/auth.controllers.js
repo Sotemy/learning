@@ -62,16 +62,13 @@ const resetController = (req, res) => {
 }
 
 const generate_token = ( id ) => {
-    const token = jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "30d"})
+    const token = jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "1d"})
     return token
 }
 
 const verify_token = (token) => {
     const res = jwt.verify(token, process.env.JWT_SECRET)
-    if (!res) {
-        return false
-    }
-    return true
+    return res
 }
 
 module.exports = { resetController, loginController, registerController, generate_token, verify_token }

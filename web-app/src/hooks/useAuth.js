@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect } from "react"
-import { useNavigate } from "react-router-dom";
 
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
@@ -8,7 +7,7 @@ import { Login } from "../pages/Login";
 
 export const useAuth = (component) => {  
     
-    if (sessionStorage.getItem("id")) {
+    if (localStorage.getItem("token")) {
         return component
     }
     return <Login />
@@ -17,7 +16,7 @@ export const useAuth = (component) => {
 }
 
 export const useLoggedIn = (component) => {
-    if (sessionStorage.getItem("id")) {
+    if (localStorage.getItem("token")) {
         return <Home />
     }
     return component

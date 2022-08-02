@@ -10,11 +10,9 @@ export const Register = () => {
   const [input, onChange] = useTextInput()
 
   const sendData = (e) => {
-
     e.preventDefault()
 
     const response = axios.post('http://localhost:4000/auth/register', input)
-
     toast.promise(
       response,
       {
@@ -24,15 +22,17 @@ export const Register = () => {
           },
         },
         success: {
-          render() {
+          render() {           
             return "Redirecting"
           },
 
         },
         error: {
           render({ data }) {
-            // When the promise reject, data will contains the error
-            return data.response.data.message
+            if (data.response.data) {
+              return data.response.data.message
+            }
+            return 'Error. Please try later'
           }
         }
       }
@@ -40,12 +40,10 @@ export const Register = () => {
 
     response.then(
       (result) => {
-        return console.log(result.status);
-      },
-      (error) => {
-        return console.log(error);
+        localStorage.setItem("token", result.data.token)
+        window.location.reload(false);
+        return
       }
-
     );
 
   }

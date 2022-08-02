@@ -23,14 +23,13 @@ export const Login = () => {
           },
         },
         success: {
-          render() {
+          render() {           
             return "Redirecting"
           },
 
         },
         error: {
           render({ data }) {
-            // When the promise reject, data will contains the error
             if (data.response.data) {
               return data.response.data.message
             }
@@ -42,12 +41,10 @@ export const Login = () => {
 
     response.then(
       (result) => {
-        return console.log(result.status);
-      },
-      (error) => {
-        return console.log(error.message);
+        localStorage.setItem("token", result.data.token)
+        window.location.reload(false);
+        return
       }
-
     );
 
   }
