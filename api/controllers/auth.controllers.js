@@ -71,4 +71,13 @@ const verify_token = (token) => {
     return res
 }
 
-module.exports = { resetController, loginController, registerController, generate_token, verify_token }
+const check = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const response = verify_token(token)
+    if (response){
+        return res.json({message: true})
+    }
+    throw new Error(false)
+}
+
+module.exports = { resetController, loginController, registerController, generate_token, verify_token, check }

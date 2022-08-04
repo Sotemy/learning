@@ -5,19 +5,6 @@ import { LinkContainer } from 'react-router-bootstrap'
 
 export const NavBar = () => {
 
-    let content = (<p>1</p>);
-
-    if (!localStorage.getItem("token")) {
-        content = (<>
-        <LinkContainer to="/login">
-            <Nav.Link>Login</Nav.Link>
-        </LinkContainer>
-        <LinkContainer to="/register">
-            <Nav.Link>Register</Nav.Link>
-        </LinkContainer></>)
-    }
-
-
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
@@ -28,7 +15,16 @@ export const NavBar = () => {
                         <Nav.Link>Home</Nav.Link>
                     </LinkContainer>
 
-                    {content}
+                    {localStorage.getItem("token") === false ? (        
+                    <><LinkContainer to="/login">
+                            <Nav.Link>Login</Nav.Link>
+                        </LinkContainer><LinkContainer to="/register">
+                                <Nav.Link>Register</Nav.Link>
+                            </LinkContainer></>):(
+                        <LinkContainer to="/">
+                            <Nav.Link>User</Nav.Link>
+                        </LinkContainer>
+                    )}
 
                 </Nav>
             </Container>

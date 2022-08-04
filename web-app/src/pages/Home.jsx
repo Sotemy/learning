@@ -1,14 +1,14 @@
-import React from 'react'
 import { Container, Card, Button } from 'react-bootstrap'
 import axios from "axios"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { LinkContainer } from 'react-router-bootstrap'
 
 export const Home = () => {
 
   const [posts, setPosts] = useState([])
 
 
-  React.useEffect( () => { 
+  useEffect( () => { 
     async function fetchData() {
       try {
         const res = await axios.get('http://localhost:4000/posts', {headers: {Authorization: 'Bearer '+localStorage.getItem("token")}}); 
@@ -26,13 +26,15 @@ export const Home = () => {
         Home Page
       </h1>
       {posts.map(post =>       
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: '18rem' }} key={post._id}>
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
           <Card.Text>
             {post.text}
           </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
+          <LinkContainer to={post._id}>
+            <Button variant="primary">Go somewhere</Button>
+          </LinkContainer>
         </Card.Body>
       </Card>
       )}

@@ -1,12 +1,16 @@
-const express = require("express")
-const cors = require("cors")
+const express = require("express");
+const cors = require("cors");
 require('dotenv').config();
 
-const connectDB = require("./database/init")
-const useError = require("./middlewares/useError")
+const connectDB = require("./database/init");
+
 const authRouter = require("./routes/auth.routes");
 const postsRouter = require("./routes/app.routes");
-const useSession = require("./middlewares/useSession");
+
+const useError = require("./middlewares/useError");
+const errorSession = require("./middlewares/useSession");
+
+
 
 const app = express()
 
@@ -19,8 +23,8 @@ connectDB()
 app.use('/auth', authRouter)
 app.use('/', postsRouter)
 
+// app.use(errorSession)
 app.use(useError)
-app.use(useSession)
 
 app.listen(4000, () => {
     console.log(`Example app listening  http://localhost:4000`)
